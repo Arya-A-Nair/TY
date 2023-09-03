@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link href="./style.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="container">
+			<div>
+				<label>Enter message</label>
+				<input id="message" />
+			</div>
+			<div>
+				<label>Enter key</label>
+				<input id="key" />
+			</div>
+			<div>
+				<label>Enter IV</label>
+				<input id="IV" />
+			</div>
+
+			<div>
+				<input id="submit" type="submit" onclick="runMAC()" />
+			</div>
+			<div>MAC: <span id="output"></span></div>
+            <div></div>
+            <div>
+                <label>Enter text: </label>
+				<input id="text" />
+            </div>
+            <div>
+				<button onclick="checkMac()">Check</button>
+            </div>
+		</div>
+
+		<script>
+			function runMAC() {
+				var key = document.getElementById("key").value;
+				var IV = document.getElementById("IV").value;
+				var message = document.getElementById("message").value;
+                var messageLength = message.length;
+                var keyLength = key.length;
+                var remainder = messageLength % keyLength;
+                var padding = keyLength - remainder;
+                if(remainder != 0){
+                    for(var i = 0; i < padding; i++){
+                        message += "0";
+                    }
+                }
+                var messageLength = message.length;
+                var keyLength = key.length;
+                var blocks = messageLength / keyLength;
+                var output = "";
+                var firstBlock = message.substring(keyLength, keyLength * 2);
+                for (let i=0;i<blocks;i++){
+                    let temp=message.substring(i*keyLength,(i+1)*keyLength);
+                    let temp2 = "";
+                    for(let j=0;j<keyLength;j++){
+                        temp2 += (parseInt(IV[j]) ^ parseInt(key[j]) ^ parseInt(temp[j])).toString();
+                    }
+                    IV = temp2;
+                }
+                document.getElementById("output").innerHTML = IV;
+			}
+            function checkMac(){
+                var key = document.getElementById("key").value;
+				var IV = document.getElementById("IV").value;
+				var message = document.getElementById("message").value;
+                var messageLength = message.length;
+                var keyLength = key.length;
+                var remainder = messageLength % keyLength;
+                var padding = keyLength - remainder;
+                if(remainder != 0){
+                    for(var i = 0; i < padding; i++){
+                        message += "0";
+                    }
+                }
+                var messageLength = message.length;
+                var keyLength = key.length;
+                var blocks = messageLength / keyLength;
+                var output = "";
+                var firstBlock = message.substring(keyLength, keyLength * 2);
+                for (let i=0;i<blocks;i++){
+                    let temp=message.substring(i*keyLength,(i+1)*keyLength);
+                    let temp2 = "";
+                    for(let j=0;j<keyLength;j++){
+                        temp2 += (parseInt(IV[j]) ^ parseInt(key[j]) ^ parseInt(temp[j])).toString();
+                    }
+                    IV = temp2;
+                }
+                if(IV == document.getElementById("text").value){
+                    alert("MAC is valid");
+                }
+                else{
+                    alert("MAC is invalid");
+                }
+            }
+		</script>
+	</body>
+</html>
