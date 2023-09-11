@@ -51,4 +51,3 @@ if __name__=="__main__":
         private_key = map(int, input("Enter private key: ").split())
         decrypted_msg = decrypt(ciphertext, private_key)
         print("Decrypted Message:", decrypted_msg)
-    
