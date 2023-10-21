@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link href="./styles.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div class="container">
+			<div>
+				<h1>Alice</h1>
+				<div>
+					<span>Enter password</span>
+					<input id="alicePassword" type="number" />
+					<button onclick="sendToBob()">Send to Bob</button>
+				</div>
+				<div><span>Received value: </span><span id="received"></span></div>
+				<div>
+                    <span>Calculated value: </span>
+                    <input id="calculatedAlice" ></input>
+                    <button onclick="calculatedAndSendAlice()">Calculated and send to bob</button>
+                </div>
+                <div>
+                    <span>Message from server</span>
+                    <span id="message"></span>
+                </div>
+			</div>
+			<div>
+				<h1>Bob</h1>
+				<div>
+					<span>Received password</span>
+					<input type="number" id="receivedPass" />
+				</div>
+				<div>
+					<span>Generate random number</span>
+					<input type="number" id="randomNumber" />
+					<button onclick="generateRandomNumber()">
+						Generate number and send
+					</button>
+				</div>
+                <div>
+                    <span>Value calculated at Bob</span>
+                    <input id="calculatedBob" ></input>
+                </div>
+                <div>
+                    <span>Received Calcuated value from Alice</span>
+                    <input id="receivedCalculatedAlice" ></input>
+                </div>
+                <div>
+                    <button onclick="sendResponse()">Send Response</button>
+                </div>
+			</div>
+		</div>
+
+		<script>
+            let Rb=0;
+			function sendToBob() {
+				console.log(document.getElementById("alicePassword").value);
+				var alicePassword = document.getElementById("alicePassword").value;
+				document.getElementById("receivedPass").value = alicePassword;
+			}
+			function generateRandomNumber() {
+				var randomNumber = Math.floor(Math.random() * 1000);
+				document.getElementById("randomNumber").value = randomNumber;
+				document.getElementById("received").innerHTML = randomNumber;
+                document.getElementById('calculatedBob').value=(document.getElementById("receivedPass").value%randomNumber);
+			}
+            function calculatedAndSendAlice(){
+                var alicePassword = document.getElementById("alicePassword").value;
+                var randomNumber = document.getElementById("randomNumber").value;
+                var calculatedValue = alicePassword%randomNumber;
+                document.getElementById("calculatedAlice").value = calculatedValue;
+                document.getElementById('receivedCalculatedAlice').value = calculatedValue;
+
+            }
+            function sendResponse(){
+                console.log(parseInt(document.getElementById("receivedCalculatedAlice").value));
+                console.log(parseInt(document.getElementById("calculatedBob").value));
+                if(document.getElementById("receivedCalculatedAlice").value===document.getElementById("calculatedBob").value){
+                    document.getElementById("message").innerHTML = "Authenticated";
+                }
+                else{
+                    document.getElementById("message").innerHTML = "Authenticated";
+                }
+            }
+		</script>
+	</body>
+</html>
